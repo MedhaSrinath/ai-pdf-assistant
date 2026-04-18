@@ -1,16 +1,38 @@
+import requests
 from pypdf import PdfReader
 
-# Make sure filename matches EXACTLY
 reader = PdfReader("sample.pdf")
 
 text = ""
 
-# Loop through all pages
 for page in reader.pages:
     extracted = page.extract_text()
-    if extracted:  # avoid None errors
+    if extracted:
         text += extracted
 
-# Print first 500 characters
-print("\nExtracted Text:\n")
-print(text[:500])
+question = input("Ask something about the PDF: ")
+
+prompt = f"""
+Answer the question based only on the context below:
+
+Context:
+{text[:2000]}
+
+Question:
+{question}
+"""
+
+response = requests.post(
+    "http://localhost:11434/api/generate",
+    json={
+        "model": "llama3",
+        "prompt": prompt,
+        "stream": False
+    }
+)
+
+data = response.json()
+
+print("\nAI says:\n")
+print(data["response"])
+
