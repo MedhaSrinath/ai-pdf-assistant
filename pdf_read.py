@@ -1,7 +1,7 @@
 import requests
 from pypdf import PdfReader
 
-reader = PdfReader("sample.pdf")
+reader = PdfReader("Sample.pdf")
 
 text = ""
 
@@ -9,6 +9,14 @@ for page in reader.pages:
     extracted = page.extract_text()
     if extracted:
         text += extracted
+#split into chunks
+def chunk_text(text,chunk_size=500):
+    chunks=[]
+    for i in range(0,len(text),chunk_size):
+        chunks.append(text[i:i+chunk_size])
+    return chunks
+
+chunks = chunk_text(text)
 
 question = input("Ask something about the PDF: ")
 
