@@ -13,7 +13,9 @@ for page in reader.pages:
 question = input("Ask something about the PDF: ")
 
 prompt = f"""
-Answer the question based only on the context below:
+You are a helpful assistant.
+
+Answer clearly and in simple terms using ONLY the context elow.
 
 Context:
 {text[:2000]}
@@ -33,6 +35,9 @@ response = requests.post(
 
 data = response.json()
 
-print("\nAI says:\n")
-print(data["response"])
+if "response" in data:
+    print("\nAI says:\n")
+    print(data["response"])
+else:
+    print("Something went wrong:", data.get("error"))
 
