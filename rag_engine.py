@@ -2,8 +2,6 @@ import numpy as np
 from pypdf import PdfReader
 from sentence_transformers import SentenceTransformer
 
-embedder = SentenceTransformer("all-MiniLM-L6-v2")
-
 
 def load_pdf(file_path):
     reader = PdfReader(file_path)
@@ -19,8 +17,12 @@ def chunk_text(text, chunk_size=800):
     return [text[i : i + chunk_size] for i in range(0, len(text), chunk_size)]
 
 
+def get_embedder():
+    return SentenceTransformer("all-MiniLM-L6-v2")
+
+
 def create_embeddings(chunks):
-    return embedder.encode(chunks)
+    return get_embedder().encode(chunks)
 
 
 def save_embeddings(chunks, embeddings, chunks_file="chunks.npy", embeddings_file="embeddings.npy"):
